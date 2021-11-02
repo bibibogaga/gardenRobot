@@ -87,7 +87,7 @@ public:
   nav_msgs::Path smooth_msg;
   nav_msgs::Path msg;
 
-  bool rrtStarPlan(pcl::PointCloud<pcl::PointXYZRGB>* pclCloud, geometry_msgs::PoseStamped pose_Start, geometry_msgs::PoseStamped pose_Goal);
+  bool rrtStarPlan(geometry_msgs::PoseStamped pose_Start, geometry_msgs::PoseStamped pose_Goal);
 
   bool fromPoseCmdvel(geometry_msgs::PoseStamped);
   bool setTargetSpeed(float vLeft, float vRight, uint8_t direction);
@@ -117,10 +117,10 @@ public:
   geometry_msgs::PoseStamped goalPoseStamped;
   uint16_t mappingStatusCmd = 0;
 
-  pcl::PointCloud<pcl::PointXYZRGB>* cloud_xyzFused = new pcl::PointCloud<pcl::PointXYZRGB>;
+  pcl::PointCloud<pcl::PointXYZ>* cloud_xyzFused = new pcl::PointCloud<pcl::PointXYZ>;
   pcl::PointCloud<pcl::PointXYZ>* laserCloudCornerFromMap_relo=new pcl::PointCloud<pcl::PointXYZ>;
 
-    geometry_msgs::PoseStamped carTF_zed2;
+  geometry_msgs::PoseStamped carTF_zed2;
   geometry_msgs::PoseStamped carTF_orb;
   sensor_msgs::Imu imu_Msg;
 

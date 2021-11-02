@@ -82,8 +82,7 @@ void Navigation::navigation_Callback(const ros::TimerEvent& event)
   }
   if(goalSet == 1 || slamGoalSet == 1) // try to find a solution
   {
-    if(rrtStarPlan(cloud_xyzFused,carTF_orb,
-          slamGoalSet == 1? generateGoal(cloud_xyzFused) : goalPoseStamped) == true){
+    if(rrtStarPlan(carTF_orb,goalPoseStamped) == true){
       smoothTraj_pub.publish(smooth_msg);
       traj_pub.publish(msg);
       smooth_msg.poses.clear();
@@ -92,7 +91,7 @@ void Navigation::navigation_Callback(const ros::TimerEvent& event)
         slamGoalSet = 2;
     }else{
       ROS_WARN("could't find a solution, try once again");
-      if(rrtStarPlan(cloud_xyzFused,carTF_orb,goalPoseStamped)){
+      if(rrtStarPlan(carTF_orb,goalPoseStamped)){
         ROS_INFO("find a solution at a second time");
         smoothTraj_pub.publish(smooth_msg);
         traj_pub.publish(msg);
@@ -772,24 +771,23 @@ geometry_msgs::PoseStamped Navigation::generateGoal(pcl::PointCloud<pcl::PointXY
 }
 
 // RRT plan setting
-bool Navigation::rrtStarPlan(pcl::PointCloud<pcl::PointXYZRGB>* pclCloud, geometry_msgs::PoseStamped pose_Start, geometry_msgs::PoseStamped pose_Goal)
+bool Navigation::rrtStarPlan(geometry_msgs::PoseStamped pose_Start, geometry_msgs::PoseStamped pose_Goal)
 {
   if(abs(pose_Goal.pose.position.x) + abs(pose_Goal.pose.position.y) < 60)
   {
-    // turn the pcl cloud to fcl::CollisionGeometry after octree 将pcl点云转成octomap
+    /*// turn the pcl cloud to fcl::CollisionGeometry after octree 将pcl点云转成octomap
     // updtae the octomap
     octomap::OcTree* treeOctomapPtr = new octomap::OcTree( 0.05 );
     for(auto p:pclCloud->points)
     {
         std::cout<<"point---------"<<p.z;
-      if(p.z > groundHeightMax + /*carTF_orb.pose.position.z*/0) //如果当前点云高度z大于zed的高度+设置的地面高度最大值
+      if(p.z > groundHeightMax + carTF_orb.pose.position.z0) //如果当前点云高度z大于zed的高度+设置的地面高度最大值
         treeOctomapPtr->updateNode( octomap::point3d(p.x, p.y, p.z), true ); //将点云里的点插入到octomap中
     }
     treeOctomapPtr->updateInnerOccupancy(); //更新octomap
     treeOctomapPtr->writeBinary("octomapmap.bt"); //写入八叉树文件----------当前位姿没有，所以写不了八叉树啊
     fcl::OcTree<float>* tree = new fcl::OcTree<float>(std::shared_ptr<const octomap::OcTree>(treeOctomapPtr));
-    tree_obj = std::shared_ptr<fcl::CollisionGeometry<float>>(tree); //fcl检测是否碰撞的环境对象,tree_obj是fcl检测而是否碰撞的环境对象
-
+    tree_obj = std::shared_ptr<fcl::CollisionGeometry<float>>(tree); //fcl检测是否碰撞的环境对象,tree_obj是fcl检测而是否碰撞的环境对象*/
     // set start and goal
     ompl::base::ScopedState<ompl::base::SE3StateSpace> start(space);
     start->setXYZ(pose_Start.pose.position.x, pose_Start.pose.position.y, pose_Start.pose.position.z);
