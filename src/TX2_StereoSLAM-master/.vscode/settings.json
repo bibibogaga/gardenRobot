@@ -1,0 +1,7 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/yoga/my_work/catkin_qi/src/TX2_StereoSLAM-master/devel/lib/python2.7/dist-packages",
+        "/opt/ros/melodic/lib/python2.7/dist-packages",
+        "/usr/lib/python2.7/dist-packages/catkin_pkg"
+    ]
+}

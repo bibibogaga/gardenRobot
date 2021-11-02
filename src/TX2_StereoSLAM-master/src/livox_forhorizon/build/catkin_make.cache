@@ -1,0 +1,2 @@
+livox_ros_driver-2.6.0/livox_ros_driver
+-DCATKIN_DEVEL_PREFIX=/home/yoga/my_work/livox_forhorizon/devel -DCMAKE_INSTALL_PREFIX=/home/yoga/my_work/livox_forhorizon/install -G Unix Makefiles

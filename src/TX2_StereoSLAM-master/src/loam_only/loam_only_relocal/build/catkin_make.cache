@@ -1,0 +1,2 @@
+livox_relocalization-master
+-DCATKIN_DEVEL_PREFIX=/home/yoga/my_work/catkin_yoga/src/TX2_StereoSLAM-master/src/loam_only/loam_only_relocal/devel -DCMAKE_INSTALL_PREFIX=/home/yoga/my_work/catkin_yoga/src/TX2_StereoSLAM-master/src/loam_only/loam_only_relocal/install -G Unix Makefiles

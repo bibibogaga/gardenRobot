@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/yoga/my_work/catkin_yoga/src/TX2_StereoSLAM-master/src/loam_only/loam_only_mapping/install/setup.sh

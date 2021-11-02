@@ -1,0 +1,7 @@
+set(qt_create_SETUP_PY_SETUP_MODULE "distutils.core")
+set(qt_create_SETUP_PY_VERSION "0.2.10")
+set(qt_create_SETUP_PY_SCRIPTS "scripts/catkin_create_qt_pkg")
+set(qt_create_SETUP_PY_PACKAGES "qt_create")
+set(qt_create_SETUP_PY_PACKAGE_DIRS "src/qt_create")
+set(qt_create_SETUP_PY_MODULES "")
+set(qt_create_SETUP_PY_MODULE_DIRS "")

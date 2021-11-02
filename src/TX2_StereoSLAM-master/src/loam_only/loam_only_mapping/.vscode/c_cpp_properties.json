@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/usr/local/include",
+                "/home/yoga/Documents/catkin_ws/devel/include",
+                "/opt/ros/melodic/include",
+                "/usr/include"
+            ],
+            "name": "Linux",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/clang"
+        }
+    ],
+    "version": 4
+}

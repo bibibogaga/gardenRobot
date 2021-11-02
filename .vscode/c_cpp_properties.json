@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/yoga/my_work/catkin_qi/devel/include",
+                "/usr/local/include",
+                "/home/yoga/Documents/catkin_ws/devel/include",
+                "/opt/ros/melodic/include",
+                "/home/yoga/my_work/catkin_qi/src/TX2_StereoSLAM-master/src/rover/include",
+                "/home/yoga/my_work/catkin_qi/src/TX2_StereoSLAM-master/src/tx2_slam/include",
+                "/home/yoga/my_work/catkin_qi/src/TX2_StereoSLAM-master/src/zed-ros-wrapper/zed_interfaces/include",
+                "/usr/include"
+            ],
+            "name": "Linux",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/clang"
+        }
+    ],
+    "version": 4
+}

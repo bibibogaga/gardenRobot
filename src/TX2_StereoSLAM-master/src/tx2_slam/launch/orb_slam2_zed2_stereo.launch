@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <!-- launch the zed_ros_wrapper node-->
+    <include file="$(find zed_wrapper)/launch/zed2.launch">
+    </include>
+
+    <node name="orb_slam2_stereo" pkg="orb_slam2_ros"
+      type="orb_slam2_ros_stereo" output="screen">
+
+       <remap from="image_left/image_color_rect" to="/zed2/zed_node/left/image_rect_color" />
+       <remap from="image_right/image_color_rect" to="/zed2/zed_node/right/image_rect_color" />
+
+       <param name="publish_pointcloud" type="bool" value="true" />
+       <param name="publish_pose" type="bool" value="true" />
+       <param name="localize_only" type="bool" value="false" />
+       <param name="reset_map" type="bool" value="false" />
+
+       <!-- static parameters -->
+       <param name="load_map" type="bool" value="false" />
+       <param name="map_file" type="string" value="/home/yoga/my_work/catkin_qi/src/TX2_StereoSLAM-master/src/tx2_slam/map/bin/zed2_slam_Map.bin" />
+       <param name="settings_file" type="string" value="$(find tx2_slam)/config/Zed2Stereo.yaml" />
+       <param name="voc_file" type="string" value="$(find tx2_slam)/Vocabulary/ORBvoc.txt" />
+
+       <param name="pointcloud_frame_id" type="string" value="map" />
+       <param name="camera_frame_id" type="string" value="camera_link" />
+       <param name="min_num_kf_in_map" type="int" value="5" />
+    </node>
+
+    <!-- Position respect to base frame (i.e. "base_link) -->
+    <arg name="cam_pos_x"             default="0.0" />
+    <arg name="cam_pos_y"             default="0.0" />
+    <arg name="cam_pos_z"             default="0.0" />
+
+    <!-- Orientation respect to base frame (i.e. "base_link) -->
+    <arg name="cam_roll"              default="0.0" />
+    <arg name="cam_pitch"             default="0.0" />
+    <arg name="cam_yaw"               default="0.0" />
+
+    <!-- ROS URDF description of the ZED -->
+    <group if="true">
+        <param name="zed2_description"
+               command="$(find xacro)/xacro '$(find tx2_slam)/urdf/zed_descr.urdf.xacro'
+                        camera_name:=tx2zed2
+                        camera_model:=zed2
+                        base_frame:=zed2_base_link
+                        cam_pos_x:=$(arg cam_pos_x)
+                        cam_pos_y:=$(arg cam_pos_y)
+                        cam_pos_z:=$(arg cam_pos_z)
+                        cam_roll:=$(arg cam_roll)
+                        cam_pitch:=$(arg cam_pitch)
+                        cam_yaw:=$(arg cam_yaw)"
+        />
+        <node name="zed2_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" required="true">
+            <remap from="robot_description" to="zed2_description" />
+        </node>
+    </group>
+
+    <!-- Launch rivz display -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tx2_slam)/config/rviz_config.rviz" output="screen" />
+
+    <node name="Slam" pkg="tx2_slam" type="Slam" output="screen">
+
+        <!--set the map/pcd save prefix-->
+        <param name="prefix" type="string" value="$(find tx2_slam)/map/pcd_files/" />
+
+        <!--set filter parameters-->
+        <param name="VoxelGrid_LeafSize" type="double" value="0.05" />
+        <param name="PassThrough_yMin" type="double" value="-4.0" />
+        <param name="PassThrough_yMax" type="double" value="4.0" />
+        <param name="PassThrough_zMin" type="double" value="-1.0" />
+        <param name="PassThrough_zMax" type="double" value="2.0" />
+        <param name="StatisticalOutlierRemoval_MeanK" type="double" value="50" />
+        <param name="StatisticalOutlierRemoval_StddevMulThresh" type="double" value="0.3" />
+
+        <!--set the pose calibration parameters-->
+        <param name="TimeLimit" type="double" value="10.0" />
+        <param name="PoseBiasLimit" type="double" value="0.1" />
+        <param name="angular_velocityLimit" type="double" value="0.8" />
+
+    </node>
+
+    <node name="Navigation" pkg="tx2_slam" type="Navigation" output="screen">
+
+        <!--set the rrt plan parameters-->
+        <param name="rrtRange" type="double" value="1.0" />
+        <param name="rrtSolutionTimeLimit" type="double" value="3" />
+        <param name="NavigatonTimerDuration" type="double" value="0.04" />
+        <param name="bounds_lmin" type="double" value="-20" />
+        <param name="bounds_lmax" type="double" value="20" />
+        <param name="bounds_wmin" type="double" value="-20" />
+        <param name="bounds_wmax" type="double" value="20" />
+        <param name="bounds_hmin" type="double" value="-0.3" />
+        <param name="bounds_hmax" type="double" value="0.3" />
+        <param name="SLAMCarShape_l" type="double" value="0.9" />
+        <param name="SLAMCarShape_w" type="double" value="1.0" />
+        <param name="SLAMCarShape_h" type="double" value="0.3" />
+
+        <!--set speed cmd value limit-->
+        <param name="cmd_vel_l_max" type="double" value="0.30" />
+        <param name="cmd_vel_r_max" type="double" value="0.30" />
+        <param name="cmd_vel_l_min" type="double" value="0.19" />
+        <param name="cmd_vel_r_min" type="double" value="0.19" />
+        <param name="cmd_vel_ro_r_max" type="double" value="0.28" />
+        <param name="cmd_vel_ro_l_max" type="double" value="0.28" />
+
+        <!--set pid parameters-->
+        <param name="straight_kp" type="double" value="0.4" />
+        <param name="straight_ki" type="double" value="0.0" />
+        <param name="straight_kd" type="double" value="0.0" />
+        <param name="orient_kp" type="double" value="0.24"/>
+        <param name="orient_ki" type="double" value="0.0" />
+        <param name="orient_kd" type="double" value="0.0" />
+        <param name="omega_kp" type="double" value="1.0" />
+        <param name="omega_ki" type="double" value="0.0" />
+        <param name="omega_kd" type="double" value="0.0" />
+        <param name="theta_kp" type="double" value="1.5" />
+        <param name="theta_ki" type="double" value="0.0" />
+        <param name="theta_kd" type="double" value="0.0" />
+        <param name="isUseThetaPid" type="bool" value="true" />
+        <param name="isUseOmegaPid" type="bool" value="false" />
+        <param name="isUsePosePid" type="bool" value="true" />
+        <param name="constSpeed" type="double" value="0.3" />
+        <param name="constOmega" type="double" value="0.7" />
+
+        <!--set the task finished satisfied threshold value-->
+        <param name="straight_bia" type="double" value="0.2" />
+        <param name="orient_bia" type="double" value="0.05" />
+
+        <!--set the length between back wheels and the zed2-->
+        <param name="carLength" type="double" value="0.28" />
+
+        <!--set the height to discard ground when rrt plan-->
+        <param name="groundHeightMax" type="double" value="-0.2" />
+
+        <!--set the speed bia between r&l wheels to manually fix the orient when go straight-->
+        <param name="l_r_vel_bia" type="double" value="0.000 " />
+
+        <!--set the self navigation parameters-->
+        <param name="thetaBiaRange" type="double" value="0.85" />
+        <param name="thetaBiaInc" type="double" value="0.1" />
+        <param name="lengthRange" type="double" value="3.6" />
+        <param name="lengthInc" type="double" value="0.1" />
+        <param name="lengthMax_threshold" type="double" value="2" />
+        <param name="lengthMax_security" type="double" value="1.5" />
+        <param name="stopThreshold" type="double" value="0.0005" />
+    </node>
+
+    <node name="rover" pkg="rover" type="rover">
+    </node>
+
+</launch>

@@ -1,0 +1,8 @@
+prefix=/home/yoga/my_work/catkin_yoga/install
+
+Name: chassis_ros
+Description: Description of chassis_ros
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib -lchassis_ros
+Requires: 

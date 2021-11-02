@@ -1,0 +1,2 @@
+livox_mapping-master
+-DCATKIN_DEVEL_PREFIX=/home/yoga/my_work/catkin_yoga/src/TX2_StereoSLAM-master/src/loam_only/loam_only_mapping/devel -DCMAKE_INSTALL_PREFIX=/home/yoga/my_work/catkin_yoga/src/TX2_StereoSLAM-master/src/loam_only/loam_only_mapping/install -G Unix Makefiles
