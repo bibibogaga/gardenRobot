@@ -931,6 +931,43 @@ void Navigation::init()
   n.getParam("trackingState",trackingState);
   ROS_INFO("trackingState: %d",trackingState);
 
+  //@yoga: read pointcloud
+    std::string map_file_path;
+    ros::param::get("~map_file_path",map_file_path);
+    if(pcl::io::loadPCDFile<pcl::PointXYZ>(map_file_path + "/corner.pcd",*laserCloudCornerFromMap_relo) == -1){
+        PCL_ERROR("Couldn't read file corner_map.pcd\n");
+        return;
+    }
+    //创建点云cloud对象作为输入点云
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::copyPointCloud(*laserCloudCornerFromMap_relo,*cloud);
+    //创建cloud_filtered作为输出点云
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZ>);
+
+    //设置滤波器对象
+    pcl::PassThrough<pcl::PointXYZ> pass;
+    pass.setInputCloud(cloud);
+    pass.setFilterFieldName("z");  //设置过滤是所需要的点云类型的z字段
+    pass.setFilterLimits(1, 10);  //设置在过滤字段上的范围
+    pass.filter(*cloud_filtered);  //执行滤波，保存过滤结果在cloud_filtered
+
+    //转成八叉树 TODO@yoga:
+    octomap::OcTree* treeOctomapPtr = new octomap::OcTree( 0.05 );
+    for(auto p:cloud_filtered->points)
+    {
+        std::cout<<"point---------"<<p.z;
+        treeOctomapPtr->updateNode( octomap::point3d(p.x, p.y, p.z), true ); //将点云里的点插入到octomap中
+    }
+    treeOctomapPtr->updateInnerOccupancy(); //更新octomap
+    treeOctomapPtr->writeBinary("octomapmap.bt"); //写入八叉树文件----------当前位姿没有，所以写不了八叉树啊
+    fcl::OcTree<float>* tree = new fcl::OcTree<float>(std::shared_ptr<const octomap::OcTree>(treeOctomapPtr));
+    tree_obj = std::shared_ptr<fcl::CollisionGeometry<float>>(tree); //fcl检测是否碰撞的环境对象,tree_obj是fcl检测而是否碰撞的环境对象
+
+
+//    oldmap_corner.header.stamp = ros::Time().fromSec(timeLaserCloudCornerLast);
+//    oldmap_corner.header.frame_id = "/map";
+//    puboldmap_corner.publish(oldmap_corner);
 
   // publish planned path
   smoothTraj_pub = n.advertise<nav_msgs::Path>( "Trajectory_marker", 1 );

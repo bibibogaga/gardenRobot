@@ -36,6 +36,10 @@
 #include <octomap/ColorOcTree.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl_ros/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl/common/io.h>
+#include <pcl_ros/filters/voxel_grid.h>
+#include <pcl_ros/filters/passthrough.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <message_filters/subscriber.h>
 #include "visualization_msgs/Marker.h"
@@ -114,7 +118,9 @@ public:
   uint16_t mappingStatusCmd = 0;
 
   pcl::PointCloud<pcl::PointXYZRGB>* cloud_xyzFused = new pcl::PointCloud<pcl::PointXYZRGB>;
-  geometry_msgs::PoseStamped carTF_zed2;
+  pcl::PointCloud<pcl::PointXYZ>* laserCloudCornerFromMap_relo=new pcl::PointCloud<pcl::PointXYZ>;
+
+    geometry_msgs::PoseStamped carTF_zed2;
   geometry_msgs::PoseStamped carTF_orb;
   sensor_msgs::Imu imu_Msg;
 
@@ -205,7 +211,7 @@ private:
 
   bool isFinishRotation = false;
 
-  // construct the state space we are planning in 状态空间，表示执行规划的状态空间，实现特定的拓扑函数：距离、插值、状态分配
+    // construct the state space we are planning in 状态空间，表示执行规划的状态空间，实现特定的拓扑函数：距离、插值、状态分配
   ompl::base::StateSpacePtr space;
   // construct an instance of  space information from this state space 空间信息类（其构造函数只需要一个状态空间作为传入参数），提供由运动规划器使用的例程；结合它所依赖的类的功能
   ompl::base::SpaceInformationPtr si;
