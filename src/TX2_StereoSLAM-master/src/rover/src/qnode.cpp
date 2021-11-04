@@ -114,9 +114,9 @@ bool QNode::init() {
 	// Add your ros communications here.
     cmd_publisher = n.advertise<std_msgs::Int32MultiArray>("/rover/QtUI_cmd_Msg", 1000);
 //	chatter_publisher = n.advertise<std_msgs::String>("chatter", 1000);
-    pointFusedCloud_sub = n.subscribe("/oldmap_corner",1,
+    pointFusedCloud_sub = n.subscribe("/laser_cloud_surround",1,
                                  &QNode::readPointFusedCloud, this);
-    pointCloud_sub = n.subscribe("/oldmap_corner",1,
+    pointCloud_sub = n.subscribe("/laser_cloud_surround",1,
                                  &QNode::readPointCloud, this);
     pathSolution_sub = n.subscribe("Trajectory_marker",1,
                                   &QNode::readpathSolution, this);

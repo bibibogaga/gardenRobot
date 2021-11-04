@@ -449,7 +449,6 @@ int main(int argc, char** argv)
 
     pcl::VoxelGrid<PointType> downSizeFilterFull;
     downSizeFilterFull.setLeafSize(0.15, 0.15, 0.15);
-    //pcl::PointCloud<pcl::PointXYZRGB>* cloud_xyz;
 
     //------------------------------------load relo map -------------------------------
     if(pcl::io::loadPCDFile<PointType>(map_file_path + "/corner.pcd",*laserCloudCornerFromMap_relo) == -1){
@@ -945,7 +944,7 @@ int main(int argc, char** argv)
                     pointAssociateToMap(&laserCloudCornerLast_down->points[i], &pointSel);
                     laserCloudCornerFromMap_relo->push_back(pointSel);
                 }
-                
+
                 laserCloudSurfFromMap_relo_down->clear();
                 laserCloudCornerFromMap_relo_down->clear();
                 downSizeFilterCorner.setInputCloud(laserCloudCornerFromMap_relo);

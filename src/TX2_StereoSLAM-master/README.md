@@ -40,3 +40,18 @@ any question, contact me by<br>
 `email`:qi.shield95@foxmail.com<br>
 you can get my blog about this project on<br>
 `zhihu`:https://zhuanlan.zhihu.com/QIQI-HITwh
+
+## TODO:2021-11-03
+读入全局地图，然后看看octomap是否保存下来 ，看路径规划是否成功，主要是看plan()函数有没有解<br>
+然后尝试在rover中显示，rover中需要修改话题<br>
+## TODO:2021-11-05
+octovis data/sample.bt
+查看八叉树
+?目前rover不显示当前位置，试着播放rosbag看看
+
+成功啦！下午实车试一下！
+
+![](/home/yoga/美化/屏幕截图 2021-11-04 11:03:54.png
+
+![](/home/yoga/美化/2021-11-04 11-07-32 的屏幕截图.png)
+
