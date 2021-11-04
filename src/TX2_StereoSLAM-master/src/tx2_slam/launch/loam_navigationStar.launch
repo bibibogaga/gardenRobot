@@ -10,8 +10,8 @@
     <include file="$(find livox_ros_driver)/launch/livox_lidar.launch">
     </include>
     <!-- launch the chassis_driver-->
-    <!--include file="$(find chassis_ros)/launch/chassis_serial.launch">
-    </include!-->
+    <include file="$(find chassis_ros)/launch/chassis_serial.launch">
+    </include>
 
     <!-- launch the livox relocal node -->
     <node pkg="livox_relocalization" type="livox_scanRegistration" name="scanRegistration" output="screen">

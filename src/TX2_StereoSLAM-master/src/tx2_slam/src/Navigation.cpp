@@ -364,7 +364,7 @@ bool Navigation::setTargetSpeed(float vLeft, float vRight, uint8_t direction)
       linear.z=0;
       angular.x=0;
       angular.y=0;
-      angular.z=0.5;
+      angular.z=0.2;
       twist.linear=linear;
       twist.angular=angular;
       ROS_INFO("turning left,direction is 1");
@@ -379,7 +379,7 @@ bool Navigation::setTargetSpeed(float vLeft, float vRight, uint8_t direction)
       linear.z=0;
       angular.x=0;
       angular.y=0;
-      angular.z=-0.5;
+      angular.z=-0.2;
       twist.linear=linear;
       twist.angular=angular;
       ROS_INFO("turing right,direction is 2");
@@ -945,14 +945,14 @@ void Navigation::init()
     pcl::PassThrough<pcl::PointXYZ> pass;
     pass.setInputCloud(cloud);
     pass.setFilterFieldName("z");  //设置过滤是所需要的点云类型的z字段
-    pass.setFilterLimits(5, 10);  //设置在过滤字段上的范围
+    pass.setFilterLimits(0, 4);  //设置在过滤字段上的范围
     pass.filter(*cloud_filtered);  //执行滤波，保存过滤结果在cloud_filtered
 
     //转成八叉树 TODO@yoga:
     octomap::OcTree* treeOctomapPtr = new octomap::OcTree( 0.05 );
     for(auto p:cloud_filtered->points)
     {
-        std::cout<<"point---------"<<p.z;
+        //std::cout<<"point---------"<<p.z;
         treeOctomapPtr->updateNode( octomap::point3d(p.x, p.y, p.z), true ); //将点云里的点插入到octomap中
     }
     treeOctomapPtr->updateInnerOccupancy(); //更新octomap
