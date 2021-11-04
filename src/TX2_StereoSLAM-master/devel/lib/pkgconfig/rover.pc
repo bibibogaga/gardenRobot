@@ -1,8 +1,0 @@
-prefix=/home/qi/catkin_qi/devel
-
-Name: rover
-Description: Description of rover
-Version: 0.1.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
